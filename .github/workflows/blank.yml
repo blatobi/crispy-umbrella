@@ -31,7 +31,7 @@ jobs:
         run: echo ${{ github.event_name }}!
   on-release:
     runs-on: ubuntu-latest
-    if: github.event_name == 'release'
+    if:  ${{ github.event_name == 'release' && !github.event.release.prerelease }}
     steps:
       - name: Run a one-line script
         run: echo ${{ github.event_name }}!
