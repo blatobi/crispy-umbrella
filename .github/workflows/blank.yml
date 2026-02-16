@@ -1,0 +1,37 @@
+name: CI
+
+# Controls when the workflow will run
+on:
+  release:
+    types: published
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  always-echo-some-context:
+    runs-on: ubuntu-latest
+    steps:
+      - name: event-name
+        run: echo ${{ github.event_name }}
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+  on-workflow-dispatch:
+    runs-on: ubuntu-latest
+    if:  ${{ github.event_name == 'workflow_dispatch' }}
+    steps:
+      - name: Run a one-line script
+        run: echo ${{ github.event_name }}!
+  on-prerelease:
+    runs-on: ubuntu-latest
+    if:  ${{ github.event_name == 'release' && github.event.release.prerelease == true }}
+    steps:
+      - name: Run a one-line script
+        run: echo ${{ github.event_name }}!
+  on-release:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    steps:
+      - name: Run a one-line script
+        run: echo ${{ github.event_name }}!
